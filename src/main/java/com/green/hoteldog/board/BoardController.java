@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,10 +38,14 @@ public class BoardController {
                     "<br>searchType : 1 = 내용 검색" +
                     "<br>searchType : 2 = 닉네임 검색")
     public GetSimpleBoardVo getBoardList(@Valid GetBoardListDto dto) {
-        if (dto.getSearch() != null && dto.getSearch().trim().length() == 0) {
+        if (dto.getPage() == 0){
+            dto.setPage(1);
+        }
+        if(dto.getSearch() != null && dto.getSearch().length() < 2){
             throw new CustomException(BoardErrorCode.SEARCH_LENGTH_ERROR);
         }
-        log.info("GetBoardListDto dto : {}", dto);
+        Pageable pageable = PageRequest.of(dto.getPage() - 1, dto.getRowCount());
+        dto.setPageable(pageable);
         return service.getBoardList(dto);
     }
     //---------------------------------------------------게시글 리스트----------------------------------------------------

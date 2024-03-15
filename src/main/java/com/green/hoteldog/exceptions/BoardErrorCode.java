@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum BoardErrorCode implements ErrorCode {
+    BAD_REQUEST_BOARD_CATEGORY_PK
+            (HttpStatus.BAD_REQUEST,"잘못된 게시판 카테고리pk값이 입력되었습니다."),
     BAD_REQUEST_BOARD_PK
             (HttpStatus.BAD_REQUEST,"잘못된 게시판pk값이 입력되었습니다."),
     BAD_REQUEST_COMMENT_PK

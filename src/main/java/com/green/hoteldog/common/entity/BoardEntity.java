@@ -2,8 +2,7 @@ package com.green.hoteldog.common.entity;
 
 import com.green.hoteldog.common.entity.base.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,6 +12,9 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "t_board")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class BoardEntity extends BaseEntity {
     @Id
     @Column(columnDefinition = "BIGINT UNSIGNED")

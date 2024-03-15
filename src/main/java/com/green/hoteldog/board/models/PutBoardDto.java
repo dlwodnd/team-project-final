@@ -11,20 +11,20 @@ import java.util.List;
 
 @Data
 public class PutBoardDto {
-    @JsonIgnore
-    private int userPk;
     @Min(value = 1,message = "boardPk 값은 최소 1 이어야 합니다.")
     @Schema(description = "게시글 pk")
-    private int boardPk;
+    private long boardPk;
     @Min(value = 1,message = "boardCategoryPk 값은 최소 1 이어야 합니다.")
     @Schema(description = "게시글 카테고리 pk")
-    private int boardCategoryPk;
+    private long boardCategoryPk;
     @NotEmpty(message = "title은 필수 입력값 입니다.")
     @Schema(description = "게시글 제목")
     private String title;
     @NotEmpty(message = "contetns값은 필수 입력값 입니다.")
     @Schema(description = "게시글 내용")
     private String contents;
+    @Schema(description = "삭제할 사진pk 리스트")
+    private List<Long> picsPk;
     @JsonIgnore
     private List<MultipartFile> pics;
 }
