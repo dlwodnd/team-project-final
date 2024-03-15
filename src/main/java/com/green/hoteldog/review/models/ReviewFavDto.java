@@ -6,8 +6,7 @@ import lombok.Data;
 
 @Data
 public class ReviewFavDto {
-    @JsonIgnore
-    private int userPk;
+
     @Schema(description = "리뷰 pk")
-    private int reviewPk;
+    private long reviewPk;
 }

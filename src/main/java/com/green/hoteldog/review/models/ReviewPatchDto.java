@@ -9,9 +9,9 @@ public class ReviewPatchDto {
     @JsonIgnore
     private int userPk;
     @Schema(description = "리뷰 pk")
-    private int reviewPk;
+    private long reviewPk;
     @Schema(description = "예약 pk")
-    private int resPk;
+    private long resPk;
     @Schema(description = "리뷰 코멘트")
     private String comment;
 }

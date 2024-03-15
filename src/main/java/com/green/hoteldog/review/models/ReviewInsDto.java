@@ -11,18 +11,15 @@ import java.util.List;
 
 @Data
 public class ReviewInsDto {
-    @JsonIgnore
-    private int reviewPk;
-    @JsonIgnore
-    private int userPk;
+
     @Schema(description = "유저가 예약한 예약pk")
-    private int resPk;
+    private long resPk;
     @Schema(description = "리뷰 코멘트")
     private String comment;
     @Min(value = 1,message = "평점은 최소 1 최대 10의 값을 보내야 합니다")
     @Max(value = 10,message = "평점은 최소 1 최대 10의 값을 보내야 합니다")
     @Schema(description = "리뷰 평정 1~10점까지 가능")
-    private int score;
+    private long score;
     @JsonIgnore
     private List<MultipartFile> pics;
 

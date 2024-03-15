@@ -11,19 +11,20 @@ import java.util.List;
 
 @Data
 public class ReviewUpdDto {
-    @JsonIgnore
-    private int userPk;
+
     @JsonIgnore
     private List<MultipartFile> pics;
+    @Schema(description = "삭제할 리뷰 사진 pk")
+    private List<Long> delPicsPk;
     @Min(value = 1,message = "입력값은 최소 1 이어야 합니다.")
     @Schema(description = "리뷰 pk")
-    private int reviewPk;
+    private long reviewPk;
     @Schema(description = "예약 pk")
-    private int resPk;
+    private long resPk;
     @Schema(description = "리뷰 코멘트")
     private String comment;
     @Min(value = 1,message = "평점은 최소 1 최대 10의 값을 보내야 합니다")
     @Max(value = 10,message = "평점은 최소 1 최대 10의 값을 보내야 합니다")
     @Schema(description = "리뷰 : 평정 1~10점까지 가능")
-    private int score;
+    private long score;
 }

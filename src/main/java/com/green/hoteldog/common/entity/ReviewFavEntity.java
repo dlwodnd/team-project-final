@@ -2,11 +2,17 @@ package com.green.hoteldog.common.entity;
 
 import com.green.hoteldog.common.entity.composite.ReviewFavComposite;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "t_review_fav")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReviewFavEntity {
     @EmbeddedId
     private ReviewFavComposite composite;

@@ -73,35 +73,35 @@ public class UserEntity extends BaseEntity {
 
     //재웅
     @ToString.Exclude
-    @OneToOne(mappedBy = "userEntity",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
+    @OneToOne(mappedBy = "userEntity",cascade = CascadeType.PERSIST,fetch = FetchType.LAZY,orphanRemoval = true)
     private UserWhereEntity userWhereEntity;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
+    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.PERSIST,fetch = FetchType.LAZY,orphanRemoval = true)
     private List<UserDogEntity> userDogEntities;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
+    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.PERSIST,fetch = FetchType.LAZY,orphanRemoval = true)
     private Set<ResPaymentEntity> resPaymentEntities;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
+    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.PERSIST,fetch = FetchType.LAZY,orphanRemoval = true)
     private Set<ReservationEntity> reservationEntities;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
+    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.PERSIST,fetch = FetchType.LAZY,orphanRemoval = true)
     private Set<ReviewFavEntity> reviewFavEntities;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
+    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.PERSIST,fetch = FetchType.LAZY,orphanRemoval = true)
     private Set<BoardEntity> boardEntities;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
+    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.PERSIST,fetch = FetchType.LAZY,orphanRemoval = true)
     private Set<BoardCommentEntity> boardCommentEntities;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
+    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.PERSIST,fetch = FetchType.LAZY,orphanRemoval = true)
     private Set<RefundEntity> refundEntities;
 
 

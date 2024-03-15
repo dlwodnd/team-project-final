@@ -2,14 +2,16 @@ package com.green.hoteldog.common.entity;
 
 import com.green.hoteldog.common.entity.base.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
 @Data
 @Entity
 @Table(name = "t_review")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReviewEntity extends BaseEntity {
     @Id
     @Column(columnDefinition = "BIGINT UNSIGNED")

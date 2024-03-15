@@ -2,11 +2,17 @@ package com.green.hoteldog.common.entity;
 
 import com.green.hoteldog.common.entity.base.CreatedAtBaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "t_review_pic")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReviewPicEntity extends CreatedAtBaseEntity {
     @Id
     @Column(columnDefinition = "BIGINT UNSIGNED")

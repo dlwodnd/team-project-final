@@ -5,6 +5,7 @@ import com.green.hoteldog.common.entity.ReviewEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> , ReviewQDslRepository{
 
@@ -19,6 +20,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> , Re
 
     //재웅
     List<ReviewEntity> findAllByReservationEntityIn(List<ReservationEntity> reservationEntityList);
+    List<ReviewEntity> findAllByReservationEntityInOrderByCreatedAtDesc(Set<ReservationEntity> reservationEntities);
     //재웅
 
 
