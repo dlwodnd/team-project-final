@@ -110,7 +110,7 @@ public class UserService {
         if (!passwordEncoder.matches(dto.getUpw(), userEntity.getUpw())) {
             throw new CustomException(UserErrorCode.MISS_MATCH_PASSWORD);
         }
-        Optional<WithdrawalUserEntity> withdrawalUserEntityOptional = withdrawalUserRepository.findById(userEntity.getUserPk());
+        withdrawalUserRepository.findById(userEntity.getUserPk());
 
 
         MyPrincipal myPrincipal = MyPrincipal.builder()

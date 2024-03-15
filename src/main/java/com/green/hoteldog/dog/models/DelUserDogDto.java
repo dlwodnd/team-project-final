@@ -7,9 +7,8 @@ import lombok.Data;
 
 @Data
 public class DelUserDogDto {
-    @JsonIgnore
-    private int userPk;
+
     @NotBlank(message = "값을 입력해 주세요")
     @Schema(description = "유저강아지 pk")
-    private int userDogPk;
+    private long userDogPk;
 }

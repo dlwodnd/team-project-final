@@ -85,6 +85,11 @@ public class BoardController {
             "<br>commentMaxPage : 게시글에 등록된 댓글 최대 페이지 수" +
             "<br>comments : 댓글 리스트")
     public BoardCommentVo getBoardComment(@Valid GetBoardCommentDto dto) {
+        if(dto.getPage() == 0){
+            dto.setPage(1);
+        }
+        Pageable pageable = PageRequest.of(dto.getPage() - 1, dto.getRowCount());
+        dto.setPageable(pageable);
         return service.getBoardComment(dto);
     }
     //--------------------------------------------게시글에 등록된 댓글 리스트------------------------------------------------
@@ -164,6 +169,11 @@ public class BoardController {
     @GetMapping("/my-board")
     @Operation(summary = "내가 쓴 글 보기", description = "내가 쓴 글 보기")
     public GetSimpleBoardVo myBoardList(@Valid GetUserBoardListDto dto) {
+        if(dto.getPage() == 0){
+            dto.setPage(1);
+        }
+        Pageable pageable = PageRequest.of(dto.getPage() - 1, dto.getRowCount());
+        dto.setPageable(pageable);
         return service.userPostingBoardList(dto);
     }
 
@@ -171,6 +181,11 @@ public class BoardController {
     @GetMapping("/my-comment")
     @Operation(summary = "내가 쓴 댓글 보기", description = "내가 쓴 댓글 보기")
     public GetUserCommentVo myCommentList(@Valid GetUserCommentListDto dto) {
+        if(dto.getPage() == 0){
+            dto.setPage(1);
+        }
+        Pageable pageable = PageRequest.of(dto.getPage() - 1, dto.getRowCount());
+        dto.setPageable(pageable);
         return service.userPostingCommentList(dto);
     }
 }

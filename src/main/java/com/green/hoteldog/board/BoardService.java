@@ -348,17 +348,39 @@ public class BoardService {
 
     }
 
-        //---------------------------------------------------게시글 정보------------------------------------------------------
-        public GetBoardInfoVo getBoardInfo (GetBoardInfoDto dto){
+    //---------------------------------------------------게시글 정보------------------------------------------------------
+        /*public GetBoardInfoVo getBoardInfo (GetBoardInfoDto dto){ //Mybatis version
             boardMapper.boardViewCount(dto.getBoardPk());
             GetBoardInfoVo vo = boardMapper.getBoardInfo(dto.getBoardPk());
             vo.setPics(boardMapper.selBoardPics(dto.getBoardPk()));
             return vo;
-        }
+        }*/
+    @Transactional
+    public GetBoardInfoVo getBoardInfo(GetBoardInfoDto dto) {
+        BoardEntity boardEntity = boardRepository.findById(dto.getBoardPk())
+                .orElseThrow(() -> new CustomException(BoardErrorCode.BAD_REQUEST_BOARD_PK));
 
-        //--------------------------------------------게시글에 등록된 댓글 리스트------------------------------------------------
-        public BoardCommentVo getBoardComment (GetBoardCommentDto dto){
+        boardEntity.setBoardViewCount(boardEntity.getBoardViewCount() + 1);
+        boardRepository.save(boardEntity);
+        GetBoardInfoVo vo = GetBoardInfoVo.builder()
+                .boardPk(boardEntity.getBoardPk())
+                .boardCategoryPk(boardEntity.getBoardCategoryEntity().getBoardCategoryPk())
+                .title(boardEntity.getTitle())
+                .userPk(boardEntity.getUserEntity().getUserPk())
+                .contents(boardEntity.getContents())
+                .nickname(boardEntity.getUserEntity().getNickname())
+                .createdAt(boardEntity.getCreatedAt().toString())
+                .boardViewCount(boardEntity.getBoardViewCount())
+                .pics(boardEntity.getBoardPicsEntityList().stream().map(BoardPicsEntity::getPic).toList())
+                .build();
 
+        return vo;
+
+    }
+
+
+    //--------------------------------------------게시글에 등록된 댓글 리스트------------------------------------------------
+        /*public BoardCommentVo getBoardComment (GetBoardCommentDto dto){ //Mybatis version
             List<CommentInfoVo> boardComment = boardMapper.selBoardComment(dto);
             for (CommentInfoVo infoVo : boardComment) {
                 infoVo.setCreatedAt(infoVo.getCreatedAt().substring(0, infoVo.getCreatedAt().lastIndexOf(".")));
@@ -373,50 +395,118 @@ public class BoardService {
             }
             vo.setCommentMaxPage(commentMaxPage);
             return vo;
-        }
-
-        //--------------------------------------------로그인 유저가 작성한 게시글-----------------------------------------------
-        public GetSimpleBoardVo userPostingBoardList (GetUserBoardListDto dto){
-            dto.setUserPk((int) facade.getLoginUserPk());
-            if (dto.getUserPk() == 0) {
-                throw new CustomException(AuthorizedErrorCode.NOT_AUTHORIZED);
-            }
-            GetSimpleBoardVo vo = new GetSimpleBoardVo();
-            vo.setSimpleBoardVoList(boardMapper.myPostingBoardList(dto));
-            for (SimpleBoardVo boardVo : vo.getSimpleBoardVoList()) {
-                boardVo.setCreatedAt(boardVo.getCreatedAt().substring(0, boardVo.getCreatedAt().indexOf(".")));
-            }
-            int userBoardCount = boardMapper.selUserBoardCount(dto.getUserPk());
-            int userBoardMaxPage = 1;
-            if (userBoardCount != 0) {
-                userBoardMaxPage = this.maxPage(userBoardCount, dto.getRowCount());
-            }
-            vo.setMaxPage(userBoardMaxPage);
-            return vo;
-        }
-
-        //--------------------------------------------로그인 유저가 작성한 댓글-------------------------------------------------
-        public GetUserCommentVo userPostingCommentList (GetUserCommentListDto dto){
-            dto.setUserPk((int) facade.getLoginUserPk());
-            if (dto.getUserPk() == 0) {
-                throw new CustomException(AuthorizedErrorCode.NOT_AUTHORIZED);
-            }
-            GetUserCommentVo vo = new GetUserCommentVo();
-            vo.setUserCommentVoList(boardMapper.myPostingCommentList(dto));
-            for (UserCommentVo userCommentVo : vo.getUserCommentVoList()) {
-                userCommentVo.setCreatedAt(userCommentVo.getCreatedAt().substring(0, userCommentVo.getCreatedAt().lastIndexOf(".")));
-            }
-            int userCommentCount = boardMapper.selUserCommentCount(dto.getUserPk());
-            int userCommentMaxPage = 1;
-            if (userCommentCount != 0) {
-                userCommentMaxPage = this.maxPage(boardMapper.selUserCommentCount(dto.getUserPk()), dto.getRowCount());
-            }
-            vo.setMaxPage(userCommentMaxPage);
-            return vo;
-        }
-
-        //------------------------------------------------총 페이지 수 계산---------------------------------------------------
-        public int maxPage ( int columnCount, int rowCount){
-            return (int) Math.ceil((double) columnCount / rowCount);
-        }
+        }*/
+    @Transactional
+    public BoardCommentVo getBoardComment(GetBoardCommentDto dto) {
+        Page<BoardCommentEntity> boardCommentEntities = boardCommentRepository.findAllByBoardEntity_BoardPkOrderByCreatedAtAsc(dto.getBoardPk(), dto.getPageable());
+        List<CommentInfoVo> commentInfoVoList = boardCommentEntities.getContent()
+                .stream()
+                .map(item -> CommentInfoVo.builder()
+                        .commentPk(item.getCommentPk())
+                        .userPk(item.getUserEntity().getUserPk())
+                        .userNickname(item.getUserEntity().getNickname())
+                        .comment(item.getComment())
+                        .createdAt(item.getCreatedAt().toString())
+                        .build())
+                .collect(Collectors.toList());
+        BoardCommentVo vo = new BoardCommentVo();
+        vo.setCommentInfoVoList(commentInfoVoList);
+        vo.setCommentCount(boardCommentEntities.getTotalElements());
+        vo.setCommentMaxPage(boardCommentEntities.getTotalPages());
+        return vo;
     }
+
+    //--------------------------------------------로그인 유저가 작성한 게시글-----------------------------------------------
+
+    /*public GetSimpleBoardVo userPostingBoardList(GetUserBoardListDto dto) {
+        dto.setUserPk((int) facade.getLoginUserPk());
+        if (dto.getUserPk() == 0) {
+            throw new CustomException(AuthorizedErrorCode.NOT_AUTHORIZED);
+        }
+        GetSimpleBoardVo vo = new GetSimpleBoardVo();
+        vo.setSimpleBoardVoList(boardMapper.myPostingBoardList(dto));
+        for (SimpleBoardVo boardVo : vo.getSimpleBoardVoList()) {
+            boardVo.setCreatedAt(boardVo.getCreatedAt().substring(0, boardVo.getCreatedAt().indexOf(".")));
+        }
+        int userBoardCount = boardMapper.selUserBoardCount(dto.getUserPk());
+        int userBoardMaxPage = 1;
+        if (userBoardCount != 0) {
+            userBoardMaxPage = this.maxPage(userBoardCount, dto.getRowCount());
+        }
+        vo.setMaxPage(userBoardMaxPage);
+        return vo;
+    }*/
+    @Transactional
+    public GetSimpleBoardVo userPostingBoardList(GetUserBoardListDto dto) {
+        UserEntity userEntity = userRepository.findById(facade.getLoginUserPk())
+                .orElseThrow(() -> new CustomException(AuthorizedErrorCode.NOT_AUTHORIZED));
+        Page<BoardEntity> boardEntities = boardRepository.findAllByUserEntityOrderByBoardPk(userEntity, dto.getPageable());
+        List<SimpleBoardVo> simpleBoardVoList = boardEntities.getContent()
+                .stream()
+                .map(item -> SimpleBoardVo.builder()
+                        .title(item.getTitle())
+                        .boardPk(item.getBoardPk())
+                        .boardCategoryPk(item.getBoardCategoryEntity().getBoardCategoryPk())
+                        .userPk(item.getUserEntity().getUserPk())
+                        .boardViewCount(item.getBoardViewCount())
+                        .categoryNm(item.getBoardCategoryEntity().getCategoryNm())
+                        .nickname(item.getUserEntity().getNickname())
+                        .createdAt(item.getCreatedAt().toString())
+                        .build())
+                .collect(Collectors.toList());
+        GetSimpleBoardVo vo = new GetSimpleBoardVo();
+        vo.setSimpleBoardVoList(simpleBoardVoList);
+        vo.setMaxPage(boardEntities.getTotalPages());
+        return vo;
+    }
+
+    //--------------------------------------------로그인 유저가 작성한 댓글-------------------------------------------------
+    /*public GetUserCommentVo userPostingCommentList(GetUserCommentListDto dto) { //Mybatis version
+        dto.setUserPk((int) facade.getLoginUserPk());
+        if (dto.getUserPk() == 0) {
+            throw new CustomException(AuthorizedErrorCode.NOT_AUTHORIZED);
+        }
+        GetUserCommentVo vo = new GetUserCommentVo();
+        vo.setUserCommentVoList(boardMapper.myPostingCommentList(dto));
+        for (UserCommentVo userCommentVo : vo.getUserCommentVoList()) {
+            userCommentVo.setCreatedAt(userCommentVo.getCreatedAt().substring(0, userCommentVo.getCreatedAt().lastIndexOf(".")));
+        }
+        int userCommentCount = boardMapper.selUserCommentCount(dto.getUserPk());
+        int userCommentMaxPage = 1;
+        if (userCommentCount != 0) {
+            userCommentMaxPage = this.maxPage(boardMapper.selUserCommentCount(dto.getUserPk()), dto.getRowCount());
+        }
+        vo.setMaxPage(userCommentMaxPage);
+        return vo;
+    }*/
+    @Transactional
+    public GetUserCommentVo userPostingCommentList(GetUserCommentListDto dto) {
+        UserEntity userEntity = userRepository.findById(facade.getLoginUserPk())
+                .orElseThrow(() -> new CustomException(AuthorizedErrorCode.NOT_AUTHORIZED));
+        Page<BoardCommentEntity> boardCommentEntities = boardCommentRepository.findAllByUserEntityOrderByCreatedAtDesc(userEntity, dto.getPageable());
+        List<UserCommentVo> userCommentVoList = boardCommentEntities.getContent()
+                .stream()
+                .map(item -> UserCommentVo.builder()
+                        .boardPk(item.getBoardEntity().getBoardPk())
+                        .title(item.getBoardEntity().getTitle())
+                        .boardCategoryPk(item.getBoardEntity().getBoardCategoryEntity().getBoardCategoryPk())
+                        .categoryNm(item.getBoardEntity().getBoardCategoryEntity().getCategoryNm())
+                        .commentPk(item.getCommentPk())
+                        .comment(item.getComment())
+                        .userPk(item.getUserEntity().getUserPk())
+                        .nickname(item.getUserEntity().getNickname())
+                        .createdAt(item.getCreatedAt().toString())
+                        .boardViewCount(item.getBoardEntity().getBoardViewCount())
+                        .build())
+                .collect(Collectors.toList());
+        GetUserCommentVo vo = new GetUserCommentVo();
+        vo.setUserCommentVoList(userCommentVoList);
+        vo.setMaxPage(boardCommentEntities.getTotalPages());
+        return vo;
+    }
+
+    //------------------------------------------------총 페이지 수 계산---------------------------------------------------
+    public int maxPage(int columnCount, int rowCount) {
+        return (int) Math.ceil((double) columnCount / rowCount);
+    }
+}

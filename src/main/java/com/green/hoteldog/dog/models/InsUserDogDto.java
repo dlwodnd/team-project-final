@@ -7,16 +7,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class InsUserDogDto {
-    @JsonIgnore
-    private int userDogPk;
-    @JsonIgnore
-    private int userPk;
     @Schema(description = "강아지 사이즈pk")
-    private int sizePk;
+    private long sizePk;
     @Schema(description = "강아지 이름")
     private String dogNm;
     @Schema(description = "강아지 나이")
-    private int dogAge;
+    private long dogAge;
     @JsonIgnore
     private MultipartFile dogPic;
     @Schema(description = "강아지 상세정보")

@@ -2,11 +2,17 @@ package com.green.hoteldog.common.entity;
 
 import com.green.hoteldog.common.entity.base.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "t_user_dog")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDogEntity extends BaseEntity {
     @Id
     @Column(columnDefinition = "BIGINT UNSIGNED")
@@ -25,7 +31,7 @@ public class UserDogEntity extends BaseEntity {
     private String dogNm;
 
     @Column(nullable = false)
-    private String dogAge;
+    private Long dogAge;
 
     @Column(name ="dog_etc" ,nullable = false)
     private String etc;
