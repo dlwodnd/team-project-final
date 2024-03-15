@@ -1,0 +1,177 @@
+
+app:
+  jwt:
+    secret: DaeguGreenArtAcademyClass502RoomForJavaSpringBootFasdasdasdighting
+    header-scheme-name: authorization
+    token-type: Bearer
+    access-token-expiry: 7200000
+    refresh-token-expiry: 1296000000
+file:
+  dir: D:/home/download/hotelDog/
+
+spring:
+  data:
+    redis:
+      host: localhost # ?? ???? ???? ???? ?? ??
+      port: 6379
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mariadb://localhost:3306/hoteldog_ver3?allowMultiQueries=true
+    username: root
+    password: green502
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 1024MB
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    # ?? ??
+    #url: jdbc:mariadb://192.168.0.144:3306/db_even_last_2
+    #username: even_last_2
+    #password: cache
+
+mybatis:
+  mapper-locations: mappers/**/*.xml
+
+springdoc:
+  swagger-ui:
+    path: /swagger.html
+server:
+  port: 8080
+
+logging:
+  level:
+    jdbc:
+      sqlonly: off
+      sqltiming: info
+      resultsettable: info
+      audit: off
+      resultset: off
+      connection: off
+
+---
+
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://192.168.0.144:3306/db_even_last_2?allowMultiQueries=true
+    username: even_last_2
+    password: cache
+  data:
+    redis:
+      host: 192.168.0.144
+      port: 6379
+  config:
+    activate:
+      on-profile: prod
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 1024MB
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+    open-in-view: false
+    generate-ddl: false
+
+file:
+  dir: /home/download/
+server:
+  port: 8080
+
+---
+
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:log4jdbc:mariadb://localhost:3306/project_jpa_test?allowMultiQueries=true
+    username: root
+    password: green502
+  data:
+    redis:
+      host: 192.168.0.144
+      port: 6379
+  config:
+    activate:
+      on-profile: projectJPA
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 1024MB
+
+file:
+  dir: /home/download/
+server:
+  port: 8080
+
+logging:
+  level:
+    jdbc:
+      sqlonly: off
+      sqltiming: info
+      resultsettable: info
+      audit: off
+      resultset: off
+      connection: off
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "jpa"
+  datasource:
+    url: jdbc:mariadb://localhost:3306/project3_jpa_test?allowMultiQueries=true
+    username: root
+    password: green502
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+    open-in-view: false
+    generate-ddl: false
+file:
+  dir: /home/download/
+server:
+  port: 8080
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "jpa2"
+  datasource:
+    url: jdbc:mariadb://localhost:3306/project3_jpa_test2?allowMultiQueries=true
+    username: root
+    password: green502
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+    open-in-view: false
+    generate-ddl: false
+file:
+  dir: /home/download/
+server:
+  port: 8082
